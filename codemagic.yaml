@@ -1,6 +1,6 @@
 workflows:
   ios-web-build:
-    name: iOS and Web Build (No Code Signing)
+    name: iOS and Web Build
     environment:
       flutter: stable
       xcode: latest
@@ -12,12 +12,13 @@ workflows:
       - name: Get dependencies
         script: |
           flutter pub get
+      - name: Install CocoaPods dependencies
+        script: |
           cd ios
-          pod install || true
-          cd ..
+          pod install
       - name: Build iOS for simulator
         script: |
-          flutter build ios --simulator --no-codesign
+          flutter build ios --simulator --debug
       - name: Build Web
         script: |
           flutter build web
