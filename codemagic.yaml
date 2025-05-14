@@ -1,16 +1,16 @@
 workflows:
-  ios-web-workflow:
-    name: Build iOS (simulator) and Web
+  ios-web-sim:
+    name: Build iOS for Simulator and Web
     max_build_duration: 45
     environment:
       flutter: stable
       xcode: latest
     scripts:
-      - name: Get Flutter packages
+      - name: Get dependencies
         script: flutter pub get
-      - name: Build iOS for simulator
+      - name: Build iOS for Simulator
         script: |
-          flutter build ios --debug --no-codesign
+          flutter build ios --debug --no-codesign --simulator
       - name: Build Web
         script: flutter build web
     artifacts:
