@@ -16,5 +16,3 @@ workflows:
     artifacts:
       - build/ios/iphonesimulator/*.app
       - build/web/**/*
-
-
