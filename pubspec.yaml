@@ -1,6 +1,7 @@
 name: benchly
 description: A Flutter app for sharing and discovering top banks
 version: 1.0.0+1
+
 environment:
   sdk: ">=2.17.0 <3.0.0"
 
@@ -15,19 +16,11 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   page_transition: ^2.1.0
   animations: ^2.0.7
-  flutter_localizations:
-    sdk: flutter
   csv: ^5.0.2
   geolocator: ^11.0.0
   google_mobile_ads: ^4.0.0
-  flutter_gen: any
 
 flutter:
   uses-material-design: true
-  generate: true
   assets:
     - assets/
-  localization:
-    arb-dir: lib/l10n
-    template-arb-file: app_en.arb
-    output-localization-file: app_localizations.dart
