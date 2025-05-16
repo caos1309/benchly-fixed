@@ -4,28 +4,33 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.18.0 <4.0.0"
-  flutter: ">=3.0.0"
+  flutter: ">=3.7.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  # Core functionality
-  google_maps_flutter: ^2.5.0
-  firebase_core: ^2.15.0
-  firebase_auth: ^4.6.2
-  cloud_firestore: ^4.8.3
+  # Icon fonts
+  cupertino_icons: ^1.0.2
+
+  # Maps & geolocation
+  google_maps_flutter: ^2.12.1
+  geolocator: ^14.0.0
+
+  # Firebase
+  firebase_core: ^3.13.0
+  firebase_auth: ^5.5.3
+  cloud_firestore: ^5.6.7
   google_sign_in: ^6.1.5
 
   # UI & utilities
   flutter_rating_bar: ^4.0.1
-  page_transition: ^2.1.0
+  page_transition: ^2.1.1
   animations: ^2.0.7
-  csv: ^5.0.2
+  csv: ^6.0.0
 
-  # Geolocation & ads
-  geolocator: ^11.0.0
-  google_mobile_ads: ^4.0.0
+  # Ads
+  google_mobile_ads: ^6.0.0
 
   # Internationalization
   flutter_localizations:
@@ -34,14 +39,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: any
+  build_runner: ^2.4.0
 
 flutter:
-  # Enables code generation (flutter_gen) for assets, localizations, etc.
   generate: true
-
   uses-material-design: true
 
-  assets:
-    - assets/
+  # Si en el futuro añades recursos (imágenes, JSON…), 
+  # crea la carpeta `assets/` y vuelve a descomentar:
+  # assets:
+  #   - assets/
 
