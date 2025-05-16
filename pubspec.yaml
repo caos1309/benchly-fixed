@@ -3,13 +3,14 @@ description: A Flutter app for sharing and discovering top banks
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.18.0 <4.0.0"
+  flutter: ">=3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  # Core
+  # Core functionality
   google_maps_flutter: ^2.5.0
   firebase_core: ^2.15.0
   firebase_auth: ^4.6.2
@@ -22,7 +23,7 @@ dependencies:
   animations: ^2.0.7
   csv: ^5.0.2
 
-  # Geolocation & Ads
+  # Geolocation & ads
   geolocator: ^11.0.0
   google_mobile_ads: ^4.0.0
 
@@ -36,11 +37,11 @@ dev_dependencies:
   build_runner: any
 
 flutter:
-  # Activa la generación automática de código (flutter_gen) para 
-  # assets, localizaciones, etc.
+  # Enables code generation (flutter_gen) for assets, localizations, etc.
   generate: true
 
   uses-material-design: true
 
   assets:
     - assets/
+
