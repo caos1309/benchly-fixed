@@ -12,13 +12,20 @@ workflows:
       - name: Get dependencies
         script: |
           flutter pub get
+      - name: Prepare iOS project
+        script: |
+          cd ios
+          # 1) Forzar deployment target a 12.0 en Runner.xcodeproj
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 10.0/IPHONEOS_DEPLOYMENT_TARGET = 12.0/g' Runner.xcodeproj/project.pbxproj
+          # 2) En el Podfile ya está platform :ios, '12.0'
       - name: Install CocoaPods dependencies
         script: |
           cd ios
           pod install
-          # ── Sanitiza cualquier flag -G en Pods y en el proyecto Runner ──
+          # 3) Sanitiza cualquier flag -G de .xcconfig y .pbxproj en Pods
           find Pods -type f \( -name '*.xcconfig' -o -name '*.pbxproj' \) -exec sed -i '' 's/-G[^ ]*//g' {} +
-          find . -type f -name 'project.pbxproj' -exec sed -i '' 's/-G[^ ]*//g' {} +
+          # 4) También sanea el proyecto Runner
+          sed -i '' 's/ -G[^ ]*//g' Runner.xcodeproj/project.pbxproj
           cd ..
       - name: Build iOS for simulator
         script: |
