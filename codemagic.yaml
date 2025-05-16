@@ -18,7 +18,7 @@ workflows:
           pod install
       - name: Build iOS for simulator
         script: |
-          flutter build ios --simulator --debug --ios-deployment-target=12.0
+          flutter build ios --simulator --debug
       - name: Build Web
         script: |
           flutter build web
@@ -29,3 +29,4 @@ workflows:
       email:
         recipients:
           - javigarciash9@gmail.com
+
