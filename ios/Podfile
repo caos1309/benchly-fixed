@@ -1,5 +1,4 @@
 platform :ios, '12.0'
-
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 flutter_application_path = File.expand_path('..')
@@ -16,17 +15,24 @@ end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    # Forzar deployment target mínimo a iOS 12.0
+    # 1) Forzar deployment target mínimo a iOS 12.0
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+
+      # 2) Eliminar cualquier bandera '-G' de los flags de compilación
+      %w[OTHER_CFLAGS OTHER_LDFLAGS OTHER_CPLUSPLUSFLAGS].each do |key|
+        if config.build_settings[key].is_a?(String)
+          flags = config.build_settings[key].split.reject { |f| f == '-G' }
+          config.build_settings[key] = flags.join(' ')
+        end
+      end
     end
 
-    # Ajustar estándar C++ para gRPC-Core a C++14
-    if target.name == 'gRPC-Core'
-      target.build_configurations.each do |config|
-        config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++14'
-        config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
-      end
+    # 3) También quitamos '-G' de COMPILER_FLAGS en cada archivo fuente
+    target.source_build_phase.files.each do |file|
+      next unless file.settings && file.settings['COMPILER_FLAGS']
+      flags = file.settings['COMPILER_FLAGS'].split.reject { |f| f == '-G' }
+      file.settings['COMPILER_FLAGS'] = flags.join(' ')
     end
   end
 end
