@@ -2,10 +2,11 @@ workflows:
   ios-web-build:
     name: iOS and Web Build
     environment:
-      os: macos
       flutter: stable
       xcode: latest
       cocoapods: default
+    machine:
+      os: macos
     scripts:
       - name: Clean project
         script: |
