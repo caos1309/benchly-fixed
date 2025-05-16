@@ -8,19 +8,39 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # Core
   google_maps_flutter: ^2.5.0
   firebase_core: ^2.15.0
   firebase_auth: ^4.6.2
   cloud_firestore: ^4.8.3
   google_sign_in: ^6.1.5
+
+  # UI & utilities
   flutter_rating_bar: ^4.0.1
   page_transition: ^2.1.0
   animations: ^2.0.7
   csv: ^5.0.2
+
+  # Geolocation & Ads
   geolocator: ^11.0.0
   google_mobile_ads: ^4.0.0
 
+  # Internationalization
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: any
+
 flutter:
+  # Activa la generación automática de código (flutter_gen) para 
+  # assets, localizaciones, etc.
+  generate: true
+
   uses-material-design: true
+
   assets:
     - assets/
