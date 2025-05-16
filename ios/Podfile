@@ -6,7 +6,7 @@ flutter_application_path = File.expand_path('..')
 load File.join(flutter_application_path, '.flutter-plugins-dependencies')
 
 target 'Runner' do
-  use_frameworks!
+  # No frameworks, solo modular headers
   use_modular_headers!
 
   # Firebase Core y Firestore
@@ -16,19 +16,11 @@ end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    # Eliminar flag inválido de BoringSSL-GRPC
-    if target.name == 'BoringSSL-GRPC'
-      target.source_build_phase.files.each do |file|
-        next unless file.settings && file.settings['COMPILER_FLAGS']
-        flags = file.settings['COMPILER_FLAGS'].split
-        flags.reject! { |flag| flag == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
-        file.settings['COMPILER_FLAGS'] = flags.join(' ')
-      end
-    end
-
     # Forzar deployment target mínimo a iOS 12.0
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+      config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+      config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
     end
   end
 end
