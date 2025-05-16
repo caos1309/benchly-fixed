@@ -16,7 +16,7 @@ workflows:
         script: |
           cd ios
           pod install
-          # ── Sanitiza las .xcconfig para quitar TODO flag -G* ──
+          # ── Sanitiza los .xcconfig para quitar TODO flag -G* ──
           find Pods -type f -name '*.xcconfig' -exec sed -i '' 's/-G[^ ]*//g' {} +
           # ── Limpia flags -G también en los proyectos de Pods (.pbxproj) ──
           find Pods -type f -name '*.pbxproj' -exec sed -i '' 's/ -G[^ ]*//g' {} +
