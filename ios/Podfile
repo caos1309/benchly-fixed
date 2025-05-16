@@ -8,30 +8,29 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # Firebase Core y Firestore
   pod 'FirebaseCore'
   pod 'FirebaseFirestore'
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    # Forzar deployment target mínimo a iOS 12.0
+    # Forzar deployment target a iOS 12.0
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
 
-      # Limpiar '-G' de todos los build settings
+      # Limpia TODOS los flags que empiecen por '-G'
       config.build_settings.keys.each do |key|
         val = config.build_settings[key]
-        next unless val.is_a?(String) && val.include?('-G')
-        flags = val.split.reject { |f| f == '-G' }
+        next unless val.is_a?(String)
+        flags = val.split.reject { |f| f.start_with?('-G') }
         config.build_settings[key] = flags.join(' ')
       end
     end
 
-    # Limpiar '-G' de flags en cada archivo fuente
+    # También limpia en cada archivo fuente
     target.source_build_phase.files.each do |file|
       next unless file.settings && file.settings['COMPILER_FLAGS']
-      flags = file.settings['COMPILER_FLAGS'].split.reject { |f| f == '-G' }
+      flags = file.settings['COMPILER_FLAGS'].split.reject { |f| f.start_with?('-G') }
       file.settings['COMPILER_FLAGS'] = flags.join(' ')
     end
   end
