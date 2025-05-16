@@ -2,6 +2,7 @@ workflows:
   ios-web-build:
     name: iOS and Web Build
     environment:
+      os: macos
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -16,6 +17,7 @@ workflows:
         script: |
           cd ios
           pod install
+          cd ..
       - name: Build iOS for simulator
         script: |
           flutter build ios --simulator --debug
