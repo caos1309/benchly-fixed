@@ -9,7 +9,6 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # Aquí irían los pods si tuvieras plugins con dependencias nativas
-
-  # Eliminamos el post_install que causaba error
+  pod 'Firebase/Core'
+  pod 'Firebase/Firestore'
 end
