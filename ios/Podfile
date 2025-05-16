@@ -5,32 +5,31 @@ flutter_application_path = File.expand_path('..')
 load File.join(flutter_application_path, '.flutter-plugins-dependencies')
 
 target 'Runner' do
-  # No frameworks dinámicos ni headers modulares (evita conflictos C++)
-  # use_frameworks!
-  # use_modular_headers!
+  use_frameworks!
+  use_modular_headers!
 
   # Firebase Core y Firestore
   pod 'FirebaseCore'
   pod 'FirebaseFirestore'
 
-  # Fuerza gRPC-Core a una versión estable
-  pod 'gRPC-Core', '1.54.0'
+  # gRPC pinneado a una versión estable anterior
+  pod 'gRPC-Core', '1.50.0'
+  pod 'gRPC-C++',  '1.50.0'
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    # Forzar deployment target a iOS 12.0 y C++14
+    # Forzar deployment target a iOS 12.0
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']    = '12.0'
       config.build_settings['CLANG_CXX_LANGUAGE_STANDARD']   = 'c++14'
       config.build_settings['CLANG_CXX_LIBRARY']             = 'libc++'
 
-      # Quitar flags que comiencen por -G
+      # Eliminar cualquier bandera que empiece por '-G'
       config.build_settings.keys.each do |key|
         next unless config.build_settings[key].is_a?(String)
-        config.build_settings[key] = config.build_settings[key]
-          .split.reject { |f| f.start_with?('-G') }
-          .join(' ')
+        flags = config.build_settings[key].split.reject { |f| f.start_with?('-G') }
+        config.build_settings[key] = flags.join(' ')
       end
     end
   end
