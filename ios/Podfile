@@ -15,20 +15,20 @@ end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    # 1) Forzar deployment target mínimo a iOS 12.0
+    # Forzar deployment target mínimo a iOS 12.0
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
 
-      # 2) Eliminar cualquier bandera '-G' de los flags de compilación
-      %w[OTHER_CFLAGS OTHER_LDFLAGS OTHER_CPLUSPLUSFLAGS].each do |key|
-        if config.build_settings[key].is_a?(String)
-          flags = config.build_settings[key].split.reject { |f| f == '-G' }
-          config.build_settings[key] = flags.join(' ')
-        end
+      # Limpiar '-G' de todos los build settings
+      config.build_settings.keys.each do |key|
+        val = config.build_settings[key]
+        next unless val.is_a?(String) && val.include?('-G')
+        flags = val.split.reject { |f| f == '-G' }
+        config.build_settings[key] = flags.join(' ')
       end
     end
 
-    # 3) También quitamos '-G' de COMPILER_FLAGS en cada archivo fuente
+    # Limpiar '-G' de flags en cada archivo fuente
     target.source_build_phase.files.each do |file|
       next unless file.settings && file.settings['COMPILER_FLAGS']
       flags = file.settings['COMPILER_FLAGS'].split.reject { |f| f == '-G' }
