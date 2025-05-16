@@ -6,7 +6,7 @@ flutter_application_path = File.expand_path('..')
 load File.join(flutter_application_path, '.flutter-plugins-dependencies')
 
 target 'Runner' do
-  # No frameworks, solo modular headers
+  use_frameworks!
   use_modular_headers!
 
   # Firebase Core y Firestore
@@ -19,8 +19,14 @@ post_install do |installer|
     # Forzar deployment target mínimo a iOS 12.0
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
-      config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
-      config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
+    end
+
+    # Ajustar estándar C++ para gRPC-Core a C++14
+    if target.name == 'gRPC-Core'
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++14'
+        config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
+      end
     end
   end
 end
