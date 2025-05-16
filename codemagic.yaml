@@ -9,24 +9,63 @@ workflows:
       - name: Clean project
         script: |
           flutter clean
+
       - name: Get dependencies
         script: |
           flutter pub get
+
+      - name: Prepare iOS project
+        script: |
+          cd ios
+          # Asegura plataforma mínima 12.0
+          sed -i '' "s/platform :ios, .*/platform :ios, '12.0'/g" Podfile
+          # Forzar deployment target en Runner.xcodeproj
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 12.0/g' Runner.xcodeproj/project.pbxproj
+          cd ..
+
       - name: Install CocoaPods dependencies
         script: |
           cd ios
           pod install
+          # ── Limpia flags -G de Pods y .pbxproj ──
+          find Pods -type f \( -name '*.xcconfig' -o -name '*.pbxproj' \) -exec sed -i '' 's/-G[^ ]*//g' {} +
+          # ── Limpia flags -G del proyecto Runner también ──
+          sed -i '' 's/ -G[^ ]*//g' Runner.xcodeproj/project.pbxproj
           cd ..
-      - name: Build iOS for device (ipa)
+
+      - name: Build iOS for simulator via xcodebuild
         script: |
-          flutter build ios --release --no-codesign
+          cd ios
+          xcodebuild \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 11,OS=latest' \
+            CODE_SIGNING_ALLOWED=NO
+          cd ..
+
+      - name: Build iOS for device via xcodebuild (release)
+        script: |
+          cd ios
+          xcodebuild \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO
+          cd ..
+
       - name: Build Web
         script: |
           flutter build web
+
     artifacts:
-      - build/ios/iphoneos/*.ipa
+      - ios/build/Build/Products/Debug-iphonesimulator/Runner.app
+      - ios/build/Build/Products/Release-iphoneos/Runner.ipa
       - build/web/**
+
     publishing:
       email:
         recipients:
           - javigarciash9@gmail.com
+
