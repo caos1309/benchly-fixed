@@ -5,8 +5,7 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
-    machine:
-      os: macos
+      instance_type: mac_mini_m1
     scripts:
       - name: Clean project
         script: |
